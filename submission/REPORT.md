@@ -69,9 +69,8 @@ Nếu Rework / Hold, việc cần làm tiếp: <<>>
 
 ## 8. Ghi chú cá nhân
 
-- **Dùng AI để làm bài** (công cụ nào, việc gì, kiểm tra thế nào; "không dùng" nếu không): <<>>
-- Gold có bị nhiễm không (bạn có nhìn pre-label hay hỏi AI trước khi gán xong)? <<không / có, như sau: ...>>
-- Máy / GPU / CVAT dùng; vướng mắc cài đặt: <<>>
+- **Dùng AI để làm bài** "không dùng" 
+- Gold có bị nhiễm không (bạn có nhìn pre-label hay hỏi AI trước khi gán xong)? không 
 - Dùng cache `data/cache/` thay vì tự chạy? <<không / có, vì ...>>
 - Lỗi / bug script đã gặp (nếu có): <<>>
 - Một điều bạn làm khác lần sau: <<>>
