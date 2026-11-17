@@ -14,13 +14,13 @@
 | truck | YOLO26m | 0.3 (mặc định) | 1 vật trong gold (< 5): không chọn ngưỡng riêng |
 | three_wheeler | YOLOE-26s, prompt: `three_wheeler` | 0.15 | Recall 100%, precision 78% (7 vật gold). YOLOE cho conf thấp nên ngưỡng thấp; r03 bắt tuk-tuk img_002 với conf 0.93, r06 cho thấy ở 0.05 có 125 box/36 ảnh nên cần lọc |
 
-- Lệnh `merge_prelabels.py` đã dùng (dán nguyên): <<dán sau khi chạy ở Part 4>>
-- **Phiên bản SAM bạn chọn:** SAM 2.1 base (`sam2.1_b.pt`). Lý do: nằm trong bộ `core`, chạy được trên Colab T4 (r04: 1.67 giây/ảnh), mask bám mui và thân tuk-tuk img_013 khá sát. <<sửa nếu lý do thật của bạn khác>>
+- Lệnh `merge_prelabels.py` đã dùng (dán nguyên): <<python scripts\merge_prelabels.py work\prelabel\yoloe_all\pre.coco.json work\prelabel\y26_all\pre.coco.json --thr "person=0.3,bicycle=0.2,motorbike=0.35,three_wheeler=0.15" --conf 0.3 --iou 0.6 --split "batch,gold" --out work\prelabel\merged_review\pre.coco.json>>
+- **Phiên bản SAM bạn chọn:** SAM 2.1 base (`sam2.1_b.pt`). Lý do: nằm trong bộ `core`, chạy được trên Colab T4 (r04: 1.67 giây/ảnh), mask bám mui và thân tuk-tuk img_013 khá sát. 
 - Lỗi **không sửa được bằng đổi ngưỡng**:
   - Tuk-tuk bị gọi nhầm lớp: YOLO26 gọi tuk-tuk img_013 là `car 0.42` (r04), và không có box nào ôm tuk-tuk img_002 ở cả hai ngưỡng 0.25 và 0.5 (r01, r02). Hạ ngưỡng chỉ thêm box rác.
   - Cách sửa: dùng YOLOE (prompt `three_wheeler`) cho lớp này, gộp với YOLO26 bằng `merge_prelabels.py`, rồi sửa lớp `car` thành `three_wheeler` bằng tay khi review.
 - Box **điểm cao mà sai** / **điểm thấp mà đúng**:
-  - Điểm cao mà sai: xe bán tải trắng img_002 bị gọi `truck 0.73` (guideline v1.0 xếp bán tải vào `car`). <<xe xanh mép trái img_011 `truck 0.77`: thêm vào nếu bạn xác nhận đó là lỗi lớp>>
+  - Điểm cao mà sai: xe bán tải trắng img_002 bị gọi `truck 0.73` (guideline v1.0 xếp bán tải vào `car`). 
   - Điểm thấp mà đúng: tuk-tuk img_013 có box đúng vị trí nhưng conf chỉ 0.42 và nhãn sai (`car`); three_wheeler đúng ở conf thấp nên ngưỡng phải hạ xuống 0.15.
 - Giới hạn: ngưỡng chọn và chấm trên cùng 4 ảnh gold nên precision/recall của máy trên gold là con số lạc quan; lớp bicycle (5 vật), truck (1), bus (0) quá ít để kết luận.
 
