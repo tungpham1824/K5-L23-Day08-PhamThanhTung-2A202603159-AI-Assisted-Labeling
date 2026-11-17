@@ -28,28 +28,28 @@
 
 | Trạng thái | Số | Tỉ lệ | Mẫu số |
 |---|---|---|---|
-| accepted | <<>> | <<>> | <<box máy>> |
-| edited | <<>> | <<>> | <<>> |
-| deleted | <<>> | <<>> | <<>> |
-| added | <<>> | <<>> | <<đối tượng sau duyệt>> |
+| accepted | 392 | 76.4% | 513 box máy |
+| edited | 33 | 6.4% | 513 box máy |
+| deleted | 84 | 16.4% | 513 box máy |
+| added | 15 | 3.4% | 440 đối tượng sau duyệt |
 
-- Lớp nào máy tệ nhất? Vì sao (dẫn ảnh)? <<>>
-- So với gold: precision / recall của **máy** <<>> (mẫu số: <<đối tượng gold>>)
+- Lớp máy tệ nhất: three_wheeler. Trong 43 box máy (10 accepted, 8 edited, 25 deleted), 25 box bị xoá (~58%), do ngưỡng 0.15 thấp nên nhiều box thừa. person bị xoá nhiều nhất về số tuyệt đối (30 box). truck bị xoá 3 và thêm 3 nhưng chỉ 2 box accepted: mẫu quá ít để kết luận.
+- So với gold: precision 66.2% (KTC 95%: 55–76%; TP 47, FP 24), recall 90.4% (KTC 95%: 79–96%; TP 47, FN 5), mẫu số 52 đối tượng gold trên 4 ảnh. Số này lạc quan vì ngưỡng chọn trên chính gold.
 
 ## 3. Thiên kiến tự động hóa và ảnh bẫy
 
-- Bắt bẫy: <<.../12>>; loại nào lọt: <<>>; vì sao (bạn đã bỏ bước nào của checklist)? <<>>
-- Accepted cao mà bắt bẫy thấp (hoặc ngược lại) nói gì về cách bạn duyệt? <<>>
+- Bắt bẫy: 7/12 = 58.3% (KTC 95%: 32–81%), dưới ngưỡng 80%. Loại lọt: loose 1/3 (img_006), extra 1/3 (img_027), wrong_class 1/3 (img_035), missing 2/3 (img_028, img_029). Chỉ bắt được 1/3 bẫy missing.
+- Vì sao lọt: img_028 và img_029 là ảnh dày xe máy: vội
+- Accepted 76.4% mà bắt bẫy chỉ 58.3%:  máy đúng phần lớn nên dễ chấp nhận cả những box sai trông hợp lý
 
 ## 4. Máy có đáng dùng không?
 
-- Thời gian (từ `time_log.csv`): gán tay <<... phút/ảnh>> vs duyệt <<... phút/ảnh>>. Thiên lệch (bạn gán gold trước nên đã quen cảnh): <<>>
-- Kết luận: <<có / không / chỉ cho lớp nào>>, dựa trên <<số liệu>>
-- **Ba quy tắc giảm thiên kiến của bạn** (mỗi quy tắc kiểm tra được bằng số hoặc việc làm):
-  1. <<>>
-  2. <<>>
-  3. <<>>
-
+- Thời gian (từ `time_log.csv`): gán tay 12 phút / 4 ảnh gold = 3.0 phút/ảnh (~13 giây/đối tượng, 55 đối tượng); duyệt 85 phút / 24 ảnh batch = 3.54 phút/ảnh (~11 giây/đối tượng, 451 đối tượng). Theo ảnh, duyệt chậm hơn gán tay ~18%; theo đối tượng, duyệt nhanh hơn ~14%, vì ảnh batch dày hơn (18.8 so với 13.8 đối tượng/ảnh). Thiên lệch: tôi gán gold trước nên đã quen cảnh và guideline; gold chỉ 4 ảnh nên số phút/ảnh không ổn định; thời gian duyệt gồm cả việc nạp CVAT, sửa ignore_region và dừng nghỉ.
+- Kết luận: chỉ đáng dùng cho person, motorbike, car (accepted cao, recall gold 90.4%), không đáng dùng nguyên trạng cho three_wheeler (58% box máy bị xoá ở ngưỡng 0.15, 25/43). Dựa trên: accepted 392/513 = 76.4%, nhưng thời gian duyệt/ảnh không thấp hơn gán tay, và bắt bẫy chỉ 7/12.
+- **Ba quy tắc giảm thiên kiến của bạn:**
+  1. Luôn ẩn nhãn máy và tự quét ảnh trước khi bật nhãn.
+  2. Với ảnh dày xe máy, đặt giờ nghỉ riêng và duyệt lại một lượt riêng cho “vật thiếu”.
+  3. Với lớp có precision thấp (three_wheeler, person): kiểm từng box theo quy tắc thay vì mặc định chấp nhận
 ## 5. Mask SAM cho 3 vật (Part 5)
 
 | Ảnh | SAM (phiên bản) | Số click | Mask gồm người lái / hàng hoá? | Lỗi quan sát | File trong `masks/` |

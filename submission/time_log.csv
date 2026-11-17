@@ -1,1 +1,3 @@
 step,images,minutes,note
+gold_manual,4,12,Gán tay 4 ảnh gold bằng CVAT theo guideline v1.0; không dùng model
+batch_review,24,85,Duyệt 24 ảnh batch trong CVAT (pre-label gộp YOLO26+YOLOE có 12 bẫy); gồm sửa ignore_region
